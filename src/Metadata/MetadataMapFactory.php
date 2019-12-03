@@ -7,6 +7,7 @@
 
 namespace Zend\Expressive\Hal\Metadata;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 
 use function array_pop;
@@ -57,9 +58,10 @@ class MetadataMapFactory
         }
 
         $metadataFactories = $config['zend-expressive-hal']['metadata-factories'] ?? [];
+        $em = $container->get(EntityManagerInterface::class);
 
         return $this->populateMetadataMapFromConfig(
-            new MetadataMap(),
+            new MetadataMap($em),
             $metadataMapConfig,
             $metadataFactories
         );

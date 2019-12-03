@@ -7,6 +7,7 @@
 
 namespace Zend\Expressive\Hal;
 
+use ContainerInteropDoctrine\EntityManagerFactory;
 use Zend\Expressive\Hal\LinkGenerator\ExpressiveUrlGenerator;
 use Zend\Expressive\Hal\LinkGenerator\UrlGeneratorInterface;
 use Zend\Expressive\Hal\Metadata\MetadataMap;
@@ -38,8 +39,13 @@ class ConfigProvider
         return [
             'aliases' => [
                 UrlGeneratorInterface::class => LinkGenerator\ExpressiveUrlGenerator::class,
+                \Doctrine\ORM\EntityManager::class => 'doctrine.entity_manager.orm_default',
+                \Doctrine\ORM\EntityManagerInterface::class => 'doctrine.entity_manager.default',
+                'doctrine.entitymanager.orm_default' => 'doctrine.entity_manager.orm_default',
+                'doctrine.entity_manager.default' => 'doctrine.entitymanager.orm_default',
             ],
             'factories' => [
+                'doctrine.entity_manager.orm_default' => EntityManagerFactory::class,
                 HalResponseFactory::class     => HalResponseFactoryFactory::class,
                 LinkGenerator::class          => LinkGeneratorFactory::class,
                 ExpressiveUrlGenerator::class => LinkGenerator\ExpressiveUrlGeneratorFactory::class,
